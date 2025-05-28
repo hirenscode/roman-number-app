@@ -1,13 +1,13 @@
 import './App.css'
-import { View } from '@adobe/react-spectrum';
-import FormContent from './FormContent';
+import { ColorSchemeProvider } from './contexts/ColorSchemeContext.jsx'
+import RomanNumber from './pages/RomanNumber.jsx';
 
 function App() {
 
   return (
-    <View padding="size-200">
-        <FormContent/>
-    </View>
+    <ColorSchemeProvider>
+      <RomanNumber/>
+    </ColorSchemeProvider>
   )
 }
 

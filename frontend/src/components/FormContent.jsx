@@ -16,8 +16,8 @@ export default function FormContent() {
     }
 
     return (
-        <Flex direction="column" alignItems="center" justifyContent="center" height="85vh" gap="size-300">
-            <Form maxWidth="size-3600">
+        <Flex direction="column" alignItems="center" justifyContent="center" width={"100%"} height="85vh" gap="size-300">
+            <Form width="100%" maxWidth="size-3600">
                 <TextField value={number}
                     validationState={isValid() ? "valid" : "invalid"}
                     errorMessage="Only 'numbers' between 1 to 3999 allowed"
