@@ -1,12 +1,13 @@
 import './App.css'
-import { Heading } from '@adobe/react-spectrum';
+import { View } from '@adobe/react-spectrum';
+import FormContent from './FormContent';
 
 function App() {
 
   return (
-    <>
-      <Heading level={1}> Here is the app </Heading>
-    </>
+    <View padding="size-200">
+        <FormContent/>
+    </View>
   )
 }
 
