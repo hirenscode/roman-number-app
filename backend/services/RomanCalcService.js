@@ -1,5 +1,7 @@
 function toRoman(num) {
   if (!+num || num < 1 || num > 3999) return 'Invalid number';
+  const cache = new Map();
+  if (cache.has(num)) return cache.get(num);
 
   const romanMap = [
     [1000, 'M'],
@@ -24,6 +26,7 @@ function toRoman(num) {
       num -= value;
     }
   }
+  cache.set(num, result);
   return result;
 }
 
