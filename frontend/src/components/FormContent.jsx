@@ -1,18 +1,32 @@
 import React, {useState} from "react";
 import {Button, Flex, Form, TextField, Text} from "@adobe/react-spectrum";
+import { useAPIConfig } from "../contexts/APIConfigContext";
 
 export default function FormContent() {
 
     const [romanNumber, setRomanNumber] = useState('I');
     const [number, setNumber] = useState(1);
+    const { backendBaseUrl } = useAPIConfig();
+
 
     const isValid = () => {
         return number >= 1 && number <= 3999;
     }
 
     const convertToRoman = () => {
-        //Fetch roman number from Backend and
-        //setRomanNumer()
+        fetch(`${backendBaseUrl}/romannumeral?number=${number}`)
+            .then(res => {
+                if (!res.ok) {
+                    setRomanNumber('API Response was not OK (200)');
+                    throw new Error('Failed to fetch Roman numeral');
+                }
+                return res.json();
+            })
+            .then(data => setRomanNumber(data.output))
+            .catch(error => {
+                console.error('Error:', error);
+                setRomanNumber('Error Fetching from API');
+            });
     }
 
     return (

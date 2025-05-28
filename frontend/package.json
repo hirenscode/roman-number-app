@@ -12,6 +12,7 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.42.0",
     "@react-spectrum/theme-default": "^3.5.18",
+    "dotenv": "^16.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
