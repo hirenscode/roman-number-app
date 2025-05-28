@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {Button, Flex, Form, TextField, Text} from "@adobe/react-spectrum";
 import { useAPIConfig } from "../contexts/APIConfigContext";
+import useLocalStorageState from "../hooks/useLocalStorageState";
 
 export default function FormContent() {
 
-    const [number, setNumber] = useState(() => {
-        const savedNumber = localStorage.getItem('number');
-        return savedNumber ? parseInt(savedNumber) : 1;
-    });
-    const [romanNumber, setRomanNumber] = useState(() => {
-        const savedRomanNumber = localStorage.getItem('romanNumber');
-        return savedRomanNumber ? savedRomanNumber : 'I';
-    });
-
-    useEffect(() => {
-        localStorage.setItem('number', number.toString());
-        localStorage.setItem('romanNumber', romanNumber);
-    }, [number, romanNumber]);
+    const [number, setNumber] = useLocalStorageState('lastNumber', 1);
+    const [romanNumber, setRomanNumber] = useLocalStorageState('lastRomanNumeral', 'I');
 
     const { backendBaseUrl } = useAPIConfig();
 
