@@ -1,7 +1,15 @@
-function toRoman(num) {
-  if (!+num || num < 1 || num > 3999) return 'Invalid number';
-  const cache = new Map();
-  if (cache.has(num)) return cache.get(num);
+const cache = new Map(); // Define cache at module scope
+
+function clearCache() {
+  cache.clear();
+}
+
+function toRoman(inputNum) {
+  if (typeof inputNum !== 'number' || isNaN(inputNum) || inputNum < 1 || inputNum > 3999 || !Number.isInteger(inputNum)) {
+    return 'Invalid number';
+  }
+
+  if (cache.has(inputNum)) return cache.get(inputNum);
 
   const romanMap = [
     [1000, 'M'],
@@ -19,6 +27,7 @@ function toRoman(num) {
     [1,    'I']
   ];
 
+  let num = inputNum;
   let result = '';
   for (const [value, symbol] of romanMap) {
     while (num >= value) {
@@ -26,8 +35,9 @@ function toRoman(num) {
       num -= value;
     }
   }
-  cache.set(num, result);
+  cache.set(inputNum, result);
   return result;
 }
 
-module.exports = { toRoman };
+
+module.exports = { toRoman, clearCache };
