@@ -1,11 +1,23 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import {Button, Flex, Form, TextField, Text} from "@adobe/react-spectrum";
 import { useAPIConfig } from "../contexts/APIConfigContext";
 
 export default function FormContent() {
 
-    const [romanNumber, setRomanNumber] = useState('I');
-    const [number, setNumber] = useState(1);
+    const [number, setNumber] = useState(() => {
+        const savedNumber = localStorage.getItem('number');
+        return savedNumber ? parseInt(savedNumber) : 1;
+    });
+    const [romanNumber, setRomanNumber] = useState(() => {
+        const savedRomanNumber = localStorage.getItem('romanNumber');
+        return savedRomanNumber ? savedRomanNumber : 'I';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('number', number.toString());
+        localStorage.setItem('romanNumber', romanNumber);
+    }, [number, romanNumber]);
+
     const { backendBaseUrl } = useAPIConfig();
 
 
