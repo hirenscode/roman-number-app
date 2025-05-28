@@ -1,10 +1,11 @@
 import './App.css'
+import { Heading } from '@adobe/react-spectrum';
 
 function App() {
 
   return (
     <>
-      <h1> Here is the app </h1>
+      <Heading level={1}> Here is the app </Heading>
     </>
   )
 }
