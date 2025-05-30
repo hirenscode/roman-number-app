@@ -61,7 +61,7 @@ describe('FormContent Component', () => {
 
         // Test invalid number (0)
         await act(async () => {
-            fireEvent.change(numberInput, { target: { value: '0' } });
+        fireEvent.change(numberInput, { target: { value: '0' } });
             // Force a re-render to update validation state
             rerender(
                 <Provider theme={defaultTheme}>
@@ -79,7 +79,7 @@ describe('FormContent Component', () => {
 
         // Test invalid number (4000)
         await act(async () => {
-            fireEvent.change(numberInput, { target: { value: '4000' } });
+        fireEvent.change(numberInput, { target: { value: '4000' } });
             // Force a re-render to update validation state
             rerender(
                 <Provider theme={defaultTheme}>
@@ -97,7 +97,7 @@ describe('FormContent Component', () => {
 
         // Test valid number (42)
         await act(async () => {
-            fireEvent.change(numberInput, { target: { value: '42' } });
+        fireEvent.change(numberInput, { target: { value: '42' } });
             // Force a re-render to update validation state
             rerender(
                 <Provider theme={defaultTheme}>
@@ -128,7 +128,7 @@ describe('FormContent Component', () => {
 
         // Enter valid number
         await act(async () => {
-            fireEvent.change(numberInput, { target: { value: '42' } });
+        fireEvent.change(numberInput, { target: { value: '42' } });
             // Force a re-render to update validation state
             rerender(
                 <Provider theme={defaultTheme}>
@@ -145,7 +145,7 @@ describe('FormContent Component', () => {
 
         // Click convert button and wait for API response
         await act(async () => {
-            fireEvent.click(convertButton);
+        fireEvent.click(convertButton);
             // Wait for the API call to complete and state to update
             await new Promise(resolve => setTimeout(resolve, 0));
             // Force a re-render to update with new state

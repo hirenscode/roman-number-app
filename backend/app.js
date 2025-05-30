@@ -10,7 +10,9 @@ const app = express();
 const PORT = process.env.PORT || 5002;
 
 const romanNumeralRoutes = require('./routes/romanNumeralRoutes');
-const frontendOrigin = 'http://localhost:5173';
+const frontendPort = process.env.FRONTEND_PORT || 5173;
+const frontendHost = process.env.FRONTEND_HOST || 'localhost';  
+const frontendOrigin = `http://${frontendHost}:${frontendPort}`;
 
 const corsOptions = {
   origin: frontendOrigin,
@@ -48,7 +50,7 @@ app.get('/metrics', async (req, res) => {
 
 // Base route
 app.get('/', (req, res) => {
-  res.send('No API at this endpoint, please try hitting http://{host}:{port}/romannumeral?number={number}!');
+  res.send(`No API at this endpoint, please try hitting ${frontendOrigin}/romannumeral?number={number}! or ${frontendOrigin}/metrics to see metrics`);
 });
 
 app.use('/romannumeral', romanNumeralRoutes);

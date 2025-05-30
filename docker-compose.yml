@@ -1,0 +1,58 @@
+version: '3.8'
+
+# Define environment variables at the root level
+x-environment: &environment
+  BACKEND_PORT: 3131
+  FRONTEND_PORT: 5151
+  BACKEND_HOST: localhost
+  FRONTEND_HOST: localhost
+
+services:
+  # Backend only
+  roman-numeral-be:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${BACKEND_PORT}
+      - LOG_LEVEL=INFO
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+
+  # Frontend only
+  roman-numeral-fe:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BACKEND_HOST=${BACKEND_HOST}
+        - VITE_BACKEND_PORT=${BACKEND_PORT}
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - NODE_ENV=production
+      - VITE_BACKEND_HOST=${BACKEND_HOST}
+      - VITE_BACKEND_PORT=${BACKEND_PORT}
+
+  # Combined app
+  roman-numeral-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_BACKEND_HOST=${BACKEND_HOST}
+        - VITE_BACKEND_PORT=${BACKEND_PORT}
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${BACKEND_PORT}
+      - LOG_LEVEL=INFO
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - VITE_BACKEND_HOST=${BACKEND_HOST}
+      - VITE_BACKEND_PORT=${BACKEND_PORT} 

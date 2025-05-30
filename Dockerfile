@@ -1,0 +1,48 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy backend files
+COPY backend/package*.json ./backend/
+WORKDIR /app/backend
+RUN npm install
+
+# Copy frontend files
+WORKDIR /app
+COPY frontend/package*.json ./frontend/
+WORKDIR /app/frontend
+RUN npm install
+
+# Copy all source code
+WORKDIR /app
+COPY backend ./backend
+COPY frontend ./frontend
+
+# Build frontend with environment variables
+WORKDIR /app/frontend
+ARG VITE_BACKEND_HOST
+ARG VITE_BACKEND_PORT
+ENV VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
+ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT:-3131}
+RUN echo "Building frontend with backend at http://${VITE_BACKEND_HOST}:${VITE_BACKEND_PORT}"
+RUN npm run build
+
+# Install serve for frontend
+RUN npm install -g serve
+
+# Create start script
+WORKDIR /app
+COPY start.sh .
+RUN chmod +x start.sh
+
+# Set environment variables for runtime
+ENV BACKEND_PORT=${BACKEND_PORT:-3131}
+ENV FRONTEND_PORT=${FRONTEND_PORT:-5151}
+ENV VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
+ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT:-3131}
+
+# Expose ports
+EXPOSE ${BACKEND_PORT:-3131} ${FRONTEND_PORT:-5151}
+
+# Start both services
+CMD ["./start.sh"] 
