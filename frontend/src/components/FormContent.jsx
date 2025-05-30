@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {Button, Flex, Form, TextField, Text} from "@adobe/react-spectrum";
 import { useAPIConfig } from "../contexts/APIConfigContext";
 import useLocalStorageState from "../hooks/useLocalStorageState";
@@ -7,7 +7,8 @@ export default function FormContent() {
 
     const [number, setNumber] = useLocalStorageState('lastNumber', 1);
     const [romanNumber, setRomanNumber] = useLocalStorageState('lastRomanNumeral', 'I');
-
+    const numberRef = useRef(null);
+    const [isFocused, setIsFocused] = useState(false);
     const { backendBaseUrl } = useAPIConfig();
 
 
@@ -41,6 +42,14 @@ export default function FormContent() {
                     onChange={(val) => {setNumber(val)}} 
                     label="Enter a Number" 
                     maxLength="4"
+                    ref={numberRef}
+                    onFocus={() => {
+                        setIsFocused(true);
+                        if (numberRef.current) {
+                            numberRef.current.select();
+                        }
+                    }}
+                    onBlur={() => setIsFocused(false)}
                 />
                 <Button onClick={convertToRoman} isDisabled={!isValid()}> Convert to Roman Numeral </Button>
                 <Text alignSelf="center" UNSAFE_style={{ textAlign: "center", fontSize: "20px" }}> Roman Numeral : {romanNumber} </Text>
