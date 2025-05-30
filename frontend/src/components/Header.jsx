@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, View, Button, Heading } from "@adobe/react-spectrum";
 import { useColorScheme } from "../contexts/ColorSchemeContext.jsx";
+import { trackComponentRender } from "../utils/observability";
 
 export default function Header() {
     const {colorScheme, toggleColorScheme} = useColorScheme();
+
+    useEffect(() => {
+        trackComponentRender('Header', { colorScheme });
+    }, [colorScheme]);
 
     return (
         <View backgroundColor="gray-200" padding="size-200">
