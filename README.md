@@ -93,7 +93,7 @@ The application will be available at, by default
 
 Port numbers can be configured as environment variables
 
-### Docker Deployment
+### Docker Deployment - also look for [Start Up Steps](./START_UP.md)
 
 #### Standalone Backend
 
@@ -126,40 +126,6 @@ docker-compose -f docker-compose.fe.yml up
 Run
 BACKEND_PORT=3333 FRONTEND_PORT=5353 docker-compose -f docker-compose.fe.yml up 
 ```
-
-#### Multiple Backend with One or many frontend
-
-Simple Load Balancer Setup (Docker Compose + Nginx):
-
-Good for: Fixed number of backend instances
-Pros:
-
-- Simpler to set up and maintain
-- Less overhead
-
-Good for development and small-scale production
-Cons:
-
-- Manual scaling (need to manually add/remove containers)
-- No automatic failover
-- No automatic health checks
-
-Kubernetes Setup:
-
-Good for: Dynamic scaling, high availability
-
-Pros:
-
-- Automatic scaling based on load
-- Automatic failover
-- Health checks and self-healing
-- Service discovery
-
-Cons:
-
-- More complex to set up and maintain
-- Higher resource overhead
-- Steeper learning curve
 
 #### Full Stack
 
