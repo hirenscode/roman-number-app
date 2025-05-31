@@ -6,11 +6,35 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 # Copy backend files
-COPY backend/package*.json ./
+COPY backend/package*.json ./backend/
+WORKDIR /app/backend
 RUN npm install
 
-# Copy backend source code
-COPY backend ./
+# Copy frontend files
+WORKDIR /app
+COPY frontend/package*.json ./frontend/
+WORKDIR /app/frontend
+RUN npm install
+
+# Copy all source code
+WORKDIR /app
+COPY backend ./backend
+COPY frontend ./frontend
+
+# Build frontend with environment variables
+WORKDIR /app/frontend
+ARG VITE_BACKEND_HOST
+ARG VITE_BACKEND_PORT
+RUN echo "Building frontend with backend at http://${VITE_BACKEND_HOST}:${VITE_BACKEND_PORT}"
+RUN npm run build
+
+# Install serve for frontend
+RUN npm install -g serve
+
+# Create start script
+WORKDIR /app
+COPY container-start.sh .
+RUN chmod +x container-start.sh
 
 # Set environment variables
 ENV PORT=8080
@@ -19,5 +43,5 @@ ENV NODE_ENV=production
 # Expose port
 EXPOSE ${PORT}
 
-# Start the backend
-CMD ["node", "app.js"] 
+# Start both services
+CMD ["./container-start.sh"] 
