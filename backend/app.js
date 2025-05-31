@@ -7,15 +7,16 @@ dotenv.config({ path: envFile });
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || process.env.BACKEND_PORT || 5002;
+const PORT = process.env.PORT || 8080;
 
 const romanNumeralRoutes = require('./routes/romanNumeralRoutes');
 const frontendPort = process.env.FRONTEND_PORT || 5173;
 const frontendHost = process.env.FRONTEND_HOST || 'localhost';  
 const frontendOrigin = `http://${frontendHost}:${frontendPort}`;
 
+// Enable CORS for all origins in production
 const corsOptions = {
-  origin: frontendOrigin,
+  origin: '*',
   optionsSuccessStatus: 200 
 };
 
@@ -50,9 +51,7 @@ app.get('/metrics', async (req, res) => {
 
 // Base route
 app.get('/', (req, res) => {
-  const host = process.env.NODE_ENV === 'test' ? '{host}' : 'localhost';
-  const port = process.env.NODE_ENV === 'test' ? '{port}' : PORT;
-  res.send(`No API at this endpoint, please try hitting http://${host}:${port}/romannumeral?number={number} or http://${host}:${port}/metrics to see metrics`);
+  res.send(`Roman Numeral API is running. Try /romannumeral?number={number} or /metrics`);
 });
 
 app.use('/romannumeral', romanNumeralRoutes);
@@ -63,15 +62,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Conditionally start server only if the script is run directly
-if (require.main === module) {
-  app.listen(PORT, '0.0.0.0', () => {
-    logger.info(`Server started`, {
-      port: PORT,
-      frontendOrigin,
-      environment: process.env.NODE_ENV || 'development'
-    });
-  });
-}
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  logger.info(`Server started on port ${PORT}`);
+});
 
 module.exports = app; // Export the app for testing
