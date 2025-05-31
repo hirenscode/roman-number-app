@@ -8,3 +8,5 @@
 .env.production
 .env.test
 .env.local
+
+.vscode

@@ -51,3 +51,5 @@ A concise overview of the development process for a full-stack Roman numeral con
 [README](README.md)
 
 [Devepment Journey](./DEVELOPMENT_JOURNEY.md)
+
+[Start Up Steps](./START_UP.md)

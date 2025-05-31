@@ -30,11 +30,11 @@ RUN npm install -g serve
 
 # Create start script
 WORKDIR /app
-COPY start.sh .
-RUN chmod +x start.sh
+COPY container-start.sh .
+RUN chmod +x container-start.sh
 
 # Expose ports
 EXPOSE ${BACKEND_PORT} ${FRONTEND_PORT}
 
 # Start both services
-CMD ["./start.sh"] 
+CMD ["./container-start.sh"] 

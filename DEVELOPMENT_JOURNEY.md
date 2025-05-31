@@ -188,6 +188,7 @@ Implemented two deployment strategies to cater to different use cases:
 - Each backend container maintains its own cache, providing natural load distribution
 - Allows for independent updates and maintenance of frontend and backend
 - Better resource isolation and management
+- This kind of setup might need extra configurations, as mentioned below (in "While using Separate Containers, we can use multiple backend containers with one or many frontend containers" section)
 
 #### Combined Container (Useful for Testing)
 
@@ -199,7 +200,43 @@ Implemented two deployment strategies to cater to different use cases:
 
 Both configurations are provided to support different deployment needs while maintaining flexibility for future scaling.
 
+#### While using Separate Containers, we can use multiple backend containers with one or many frontend containers
+
+Simple Load Balancer Setup (Docker Compose + Nginx):
+
+Good for: Fixed number of backend instances
+Pros:
+
+- Simpler to set up and maintain
+- Less overhead
+
+Good for development and small-scale production
+Cons:
+
+- Manual scaling (need to manually add/remove containers)
+- No automatic failover
+- No automatic health checks
+
+Kubernetes Setup:
+
+Good for: Dynamic scaling, high availability
+
+Pros:
+
+- Automatic scaling based on load
+- Automatic failover
+- Health checks and self-healing
+- Service discovery
+
+Cons:
+
+- More complex to set up and maintain
+- Higher resource overhead
+- Steeper learning curve
+
 
 [README](README.md)
 
 [Concise Devepment Journey](./SHORT_DEVELOPMENT_JOURNEY.md)
+
+[Start Up Steps](./START_UP.md)
