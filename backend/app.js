@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 const { logger, metrics } = require('./observability');
 
 const envFile = process.env.NODE_ENV === 'development' ? '.env.dev' : '.env';
@@ -7,15 +8,16 @@ dotenv.config({ path: envFile });
 
 const express = require('express');
 const app = express();
-const BACKEND_PORT = process.env.BACKEND_PORT || 5002;
+const PORT = process.env.PORT || 8080;
 
 const romanNumeralRoutes = require('./routes/romanNumeralRoutes');
 const frontendPort = process.env.FRONTEND_PORT || 5173;
 const frontendHost = process.env.FRONTEND_HOST || 'localhost';  
 const frontendOrigin = `http://${frontendHost}:${frontendPort}`;
 
+// Enable CORS for all origins in production
 const corsOptions = {
-  origin: frontendOrigin,
+  origin: '*',
   optionsSuccessStatus: 200 
 };
 
@@ -42,6 +44,9 @@ app.use(cors(corsOptions));
 // Middleware to parse JSON
 app.use(express.json());
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Metrics endpoint
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', metrics.register.contentType);
@@ -50,9 +55,7 @@ app.get('/metrics', async (req, res) => {
 
 // Base route
 app.get('/', (req, res) => {
-  const host = process.env.NODE_ENV === 'test' ? '{host}' : 'localhost';
-  const port = process.env.NODE_ENV === 'test' ? '{port}' : BACKEND_PORT;
-  res.send(`No API at this endpoint, please try hitting http://${host}:${port}/romannumeral?number={number} or http://${host}:${port}/metrics to see metrics`);
+  res.send(`Roman Numeral API is running. Try /romannumeral?number={number} or /metrics`);
 });
 
 app.use('/romannumeral', romanNumeralRoutes);
@@ -63,15 +66,14 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Conditionally start server only if the script is run directly
-if (require.main === module) {
-  app.listen(BACKEND_PORT, () => {
-    logger.info(`Server started`, {
-      port: BACKEND_PORT,
-      frontendOrigin,
-      environment: process.env.NODE_ENV || 'development'
-    });
-  });
-}
+// For any other route, serve the frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  logger.info(`Server started on port ${PORT}`);
+});
 
 module.exports = app; // Export the app for testing

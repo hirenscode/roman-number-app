@@ -1,40 +1,33 @@
+FROM node:20-alpine as frontend-builder
+
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend ./
+ENV VITE_BACKEND_HOST=
+ENV VITE_BACKEND_PORT=
+RUN npm run build
+
 FROM node:20-alpine
 
 WORKDIR /app
 
 # Copy backend files
-COPY backend/package*.json ./backend/
-WORKDIR /app/backend
+COPY backend/package*.json ./
 RUN npm install
 
-# Copy frontend files
-WORKDIR /app
-COPY frontend/package*.json ./frontend/
-WORKDIR /app/frontend
-RUN npm install
+# Copy backend source code
+COPY backend ./
 
-# Copy all source code
-WORKDIR /app
-COPY backend ./backend
-COPY frontend ./frontend
+# Copy built frontend
+COPY --from=frontend-builder /app/frontend/dist ./public
 
-# Build frontend with environment variables
-WORKDIR /app/frontend
-ARG VITE_BACKEND_HOST
-ARG VITE_BACKEND_PORT
-RUN echo "Building frontend with backend at http://${VITE_BACKEND_HOST}:${VITE_BACKEND_PORT}"
-RUN npm run build
+# Set environment variables
+ENV PORT=8080
+ENV NODE_ENV=production
 
-# Install serve for frontend
-RUN npm install -g serve
+# Expose port
+EXPOSE ${PORT}
 
-# Create start script
-WORKDIR /app
-COPY container-start.sh .
-RUN chmod +x container-start.sh
-
-# Expose ports
-EXPOSE ${BACKEND_PORT} ${FRONTEND_PORT}
-
-# Start both services
-CMD ["./container-start.sh"] 
+# Start the backend
+CMD ["node", "app.js"] 
