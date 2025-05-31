@@ -7,8 +7,8 @@ COPY frontend/package*.json ./frontend/
 WORKDIR /app/frontend
 RUN npm install
 COPY frontend ./
-ENV VITE_BACKEND_HOST=localhost
-ENV VITE_BACKEND_PORT=8080
+ENV VITE_BACKEND_HOST=
+ENV VITE_BACKEND_PORT=
 RUN npm run build
 
 # Build backend
