@@ -33,8 +33,13 @@ WORKDIR /app
 COPY container-start.sh .
 RUN chmod +x container-start.sh
 
-# Expose ports
-EXPOSE ${BACKEND_PORT} ${FRONTEND_PORT}
+# Set environment variables
+ENV PORT=8080
+ENV BACKEND_PORT=8080
+ENV FRONTEND_PORT=8080
+
+# Expose port
+EXPOSE ${PORT}
 
 # Start both services
 CMD ["./container-start.sh"] 
