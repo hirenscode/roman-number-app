@@ -37,6 +37,7 @@ RUN chmod +x container-start.sh
 ENV PORT=8080
 ENV BACKEND_PORT=8080
 ENV FRONTEND_PORT=8080
+ENV NODE_ENV=production
 
 # Expose port
 EXPOSE ${PORT}
