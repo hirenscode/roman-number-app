@@ -2,6 +2,16 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Add build arguments for environment variables
+ARG BACKEND_PORT
+ARG FRONTEND_PORT
+ARG FRONTEND_HOST
+
+# Set environment variables
+ENV BACKEND_PORT=${BACKEND_PORT:-3131}
+ENV FRONTEND_PORT=${FRONTEND_PORT:-5151}
+ENV FRONTEND_HOST=${FRONTEND_HOST:-localhost}
+
 # Copy package files
 COPY package*.json ./
 
@@ -12,7 +22,7 @@ RUN npm install
 COPY . .
 
 # Expose port
-EXPOSE 3131
+EXPOSE ${BACKEND_PORT}
 
 # Start the app
 CMD ["npm", "start"] 

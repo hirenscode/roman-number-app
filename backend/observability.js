@@ -65,7 +65,7 @@ const cacheMetrics = {
 
 // Winston logger setup
 const logger = winston.createLogger({
-  level: LOG_LEVEL,
+  level: process.env.NODE_ENV === 'test' ? 'error' : LOG_LEVEL,
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
@@ -76,6 +76,7 @@ const logger = winston.createLogger({
         winston.format.colorize(),
         winston.format.simple()
       ),
+      silent: process.env.NODE_ENV === 'test' // Disable console output during tests
     }),
     // TODO: Add file transport in production
     // new winston.transports.File({ 

@@ -7,7 +7,7 @@ dotenv.config({ path: envFile });
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 5002;
+const BACKEND_PORT = process.env.BACKEND_PORT || 5002;
 
 const romanNumeralRoutes = require('./routes/romanNumeralRoutes');
 const frontendPort = process.env.FRONTEND_PORT || 5173;
@@ -50,7 +50,9 @@ app.get('/metrics', async (req, res) => {
 
 // Base route
 app.get('/', (req, res) => {
-  res.send(`No API at this endpoint, please try hitting ${frontendOrigin}/romannumeral?number={number}! or ${frontendOrigin}/metrics to see metrics`);
+  const host = process.env.NODE_ENV === 'test' ? '{host}' : 'localhost';
+  const port = process.env.NODE_ENV === 'test' ? '{port}' : BACKEND_PORT;
+  res.send(`No API at this endpoint, please try hitting http://${host}:${port}/romannumeral?number={number} or http://${host}:${port}/metrics to see metrics`);
 });
 
 app.use('/romannumeral', romanNumeralRoutes);
@@ -63,9 +65,9 @@ app.use((err, req, res, next) => {
 
 // Conditionally start server only if the script is run directly
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(BACKEND_PORT, () => {
     logger.info(`Server started`, {
-      port: PORT,
+      port: BACKEND_PORT,
       frontendOrigin,
       environment: process.env.NODE_ENV || 'development'
     });

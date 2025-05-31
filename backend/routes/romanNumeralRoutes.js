@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     const numberFromQuery = req.query.number;
     if (!numberFromQuery) {
         logger.warn('Missing number parameter', { query: req.query });
-        metrics.romanConversionCounter.inc({ status: 'error', reason: 'missing_parameter' });
+        metrics.romanConversionCounter.inc({ status: 'error' });
         return res.status(400).json({ error: 'Missing query parameter: number' });
     }
 
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
     if (isNaN(number)) {
         logger.warn('Invalid number parameter', { input: numberFromQuery });
-        metrics.romanConversionCounter.inc({ status: 'error', reason: 'invalid_number' });
+        metrics.romanConversionCounter.inc({ status: 'error' });
         return res.status(400).json({ error: 'Query parameter "number" must be a number' });
     }
 
@@ -30,8 +30,8 @@ router.get('/', (req, res) => {
             input: number, 
             error: error.message 
         });
-        metrics.romanConversionCounter.inc({ status: 'error', reason: 'conversion_failed' });
-        res.status(500).json({ error: 'Failed to convert number to Roman numeral' });
+        metrics.romanConversionCounter.inc({ status: 'error' });
+        res.status(400).json({ error: 'Failed to convert number to Roman numeral' });
     }
 });
 

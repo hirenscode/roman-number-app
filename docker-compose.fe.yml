@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
+        - VITE_BACKEND_PORT=${BACKEND_PORT:-3131}
+        - FRONTEND_PORT=${FRONTEND_PORT:-5151}
+    ports:
+      - "${FRONTEND_PORT:-5151}:${FRONTEND_PORT:-5151}"
+    environment:
+      - VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
+      - VITE_BACKEND_PORT=${BACKEND_PORT:-3131}
+      - FRONTEND_PORT=${FRONTEND_PORT:-5151}

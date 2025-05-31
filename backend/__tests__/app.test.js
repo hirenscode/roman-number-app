@@ -6,7 +6,7 @@ describe('Express App', () => {
     test('should return the sample message', async () => {
       const response = await request(app).get('/');
       expect(response.status).toBe(200);
-      expect(response.text).toBe('No API at this endpoint, please try hitting http://{host}:{port}/romannumeral?number={number}!');
+      expect(response.text).toBe('No API at this endpoint, please try hitting http://{host}:{port}/romannumeral?number={number} or http://{host}:{port}/metrics to see metrics');
     });
   });
 

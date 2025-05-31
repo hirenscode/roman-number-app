@@ -22,8 +22,6 @@ COPY frontend ./frontend
 WORKDIR /app/frontend
 ARG VITE_BACKEND_HOST
 ARG VITE_BACKEND_PORT
-ENV VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
-ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT:-3131}
 RUN echo "Building frontend with backend at http://${VITE_BACKEND_HOST}:${VITE_BACKEND_PORT}"
 RUN npm run build
 
@@ -35,14 +33,8 @@ WORKDIR /app
 COPY start.sh .
 RUN chmod +x start.sh
 
-# Set environment variables for runtime
-ENV BACKEND_PORT=${BACKEND_PORT:-3131}
-ENV FRONTEND_PORT=${FRONTEND_PORT:-5151}
-ENV VITE_BACKEND_HOST=${VITE_BACKEND_HOST:-localhost}
-ENV VITE_BACKEND_PORT=${VITE_BACKEND_PORT:-3131}
-
 # Expose ports
-EXPOSE ${BACKEND_PORT:-3131} ${FRONTEND_PORT:-5151}
+EXPOSE ${BACKEND_PORT} ${FRONTEND_PORT}
 
 # Start both services
 CMD ["./start.sh"] 
