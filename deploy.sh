@@ -4,7 +4,7 @@
 set -e
 
 # Configuration
-PROJECT_ID="your-project-id"  # Replace with your Google Cloud project ID
+PROJECT_ID="roman-converter"  # Your existing project ID
 REGION="us-central1"          # Replace with your preferred region
 SERVICE_NAME="roman-numeral-app"
 IMAGE_NAME="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
