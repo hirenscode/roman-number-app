@@ -2,6 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Copy backend files
 COPY backend/package*.json ./backend/
 WORKDIR /app/backend
