@@ -28,13 +28,8 @@ RUN npm run build
 # Install serve for frontend
 RUN npm install -g serve
 
-# Create start script
-WORKDIR /app
-COPY container-start.sh .
-RUN chmod +x container-start.sh
-
 # Expose ports
 EXPOSE ${BACKEND_PORT} ${FRONTEND_PORT}
 
 # Start both services
-CMD ["./container-start.sh"] 
+CMD cd /app/backend && npm start & cd /app/frontend && serve -s dist -l ${FRONTEND_PORT} 

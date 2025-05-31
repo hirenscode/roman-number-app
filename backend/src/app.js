@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { logger, metrics } = require('./observability');
+const configureCors = require('./config/cors');
 
 const envFile = process.env.NODE_ENV === 'development' ? '.env.dev' : '.env';
 dotenv.config({ path: envFile });
@@ -13,11 +14,7 @@ const romanNumeralRoutes = require('./routes/romanNumeralRoutes');
 const frontendPort = process.env.FRONTEND_PORT || 5173;
 const frontendHost = process.env.FRONTEND_HOST || 'localhost';  
 const frontendOrigin = `http://${frontendHost}:${frontendPort}`;
-
-const corsOptions = {
-  origin: frontendOrigin,
-  optionsSuccessStatus: 200 
-};
+const frontendOriginAlt = `http://0.0.0.0:${frontendPort}`;
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -38,7 +35,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors(corsOptions));
+// Apply CORS configuration
+app.use(cors(configureCors()));
+
 // Middleware to parse JSON
 app.use(express.json());
 
@@ -66,6 +65,9 @@ app.use((err, req, res, next) => {
 // Conditionally start server only if the script is run directly
 if (require.main === module) {
   app.listen(BACKEND_PORT, () => {
+    const host = process.env.NODE_ENV === 'test' ? '{host}' : 'localhost';
+    const port = process.env.NODE_ENV === 'test' ? '{port}' : BACKEND_PORT;
+    logger.startup(`Backend server is running on port ${BACKEND_PORT}, you can access backend using http://${host}:${port}`);
     logger.info(`Server started`, {
       port: BACKEND_PORT,
       frontendOrigin,

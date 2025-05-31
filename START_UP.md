@@ -6,10 +6,10 @@
 
 ```bash
 # Default port (3131)
-Build
-docker-compose -f docker-compose.be.yml --build
+# Build and Run
+docker-compose -f docker-compose.be.yml up --build
 
-Run
+# Run
 docker-compose -f docker-compose.be.yml up 
 
 
@@ -22,15 +22,15 @@ BACKEND_PORT=3333 FRONTEND_PORT=5353 docker-compose -f docker-compose.be.yml up
 
 ```bash
 # Default port (5151)
-Build
-docker-compose -f docker-compose.fe.yml --build
+# Build and Run
+docker-compose -f docker-compose.fe.yml up --build
 
-Run
+# Run
 docker-compose -f docker-compose.fe.yml up 
 
 
 # Custom port
-Run
+# Run
 BACKEND_PORT=3333 FRONTEND_PORT=5353 docker-compose -f docker-compose.fe.yml up 
 ```
 
