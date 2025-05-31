@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 const { logger, metrics } = require('./observability');
 
 const envFile = process.env.NODE_ENV === 'development' ? '.env.dev' : '.env';
@@ -43,6 +44,9 @@ app.use(cors(corsOptions));
 // Middleware to parse JSON
 app.use(express.json());
 
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Metrics endpoint
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', metrics.register.contentType);
@@ -60,6 +64,11 @@ app.use('/romannumeral', romanNumeralRoutes);
 app.use((err, req, res, next) => {
   logger.error('Unhandled error', { error: err.message, stack: err.stack });
   res.status(500).json({ error: 'Internal server error' });
+});
+
+// For any other route, serve the frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start server
