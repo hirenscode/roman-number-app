@@ -2,18 +2,19 @@
 
 # Use the PORT provided by Cloud Run, or default to 8080
 PORT=${PORT:-8080}
-echo "Starting services on port: $PORT"
+BACKEND_PORT=8081
+echo "Starting services on ports: Frontend=$PORT, Backend=$BACKEND_PORT"
 
 # Start backend
 cd /app/backend
-echo "Starting backend on port $PORT..."
-PORT=$PORT npm start &
+echo "Starting backend on port $BACKEND_PORT..."
+PORT=$BACKEND_PORT npm start &
 BACKEND_PID=$!
 
 # Wait for backend to be ready
 echo "Waiting for backend to be ready..."
 for i in {1..30}; do
-    if curl -s http://localhost:$PORT/metrics > /dev/null; then
+    if curl -s http://localhost:$BACKEND_PORT/metrics > /dev/null; then
         echo "Backend is ready!"
         break
     fi

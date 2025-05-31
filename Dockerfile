@@ -23,8 +23,8 @@ COPY frontend ./frontend
 
 # Build frontend with environment variables
 WORKDIR /app/frontend
-ARG VITE_BACKEND_HOST
-ARG VITE_BACKEND_PORT
+ENV VITE_BACKEND_HOST=localhost
+ENV VITE_BACKEND_PORT=8081
 RUN echo "Building frontend with backend at http://${VITE_BACKEND_HOST}:${VITE_BACKEND_PORT}"
 RUN npm run build
 
